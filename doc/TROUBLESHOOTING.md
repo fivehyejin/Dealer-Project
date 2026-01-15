@@ -102,6 +102,80 @@
 
 ---
 
+### 2.3 Next.js 빌드 캐시 에러 (Cannot find module './XXX.js')
+
+**문제**: 개발 서버 실행 시 `Error: Cannot find module './329.js'` 또는 유사한 webpack 모듈 에러 발생
+
+**증상**:
+```
+Error: Cannot find module './329.js'
+Require stack:
+- D:\test06\.next\server\webpack-runtime.js
+- D:\test06\.next\server\pages\_document.js
+...
+```
+
+**원인**:
+- Next.js의 `.next` 폴더 내 빌드 캐시 손상
+- 개발 서버가 비정상 종료되어 캐시 불일치 발생
+- Hot reload 중 캐시 업데이트 실패
+- 여러 개발 서버 프로세스가 동시에 실행되어 충돌
+
+**해결방안**:
+1. **모든 Node.js 프로세스 종료**
+   ```powershell
+   # Windows PowerShell
+   Get-Process -Name node -ErrorAction SilentlyContinue | Stop-Process -Force
+   ```
+
+2. **빌드 캐시 폴더 삭제**
+   ```powershell
+   # .next 폴더 삭제
+   Remove-Item -Path .next -Recurse -Force -ErrorAction SilentlyContinue
+   
+   # node_modules 캐시 삭제 (필요 시)
+   Remove-Item -Path node_modules/.cache -Recurse -Force -ErrorAction SilentlyContinue
+   ```
+
+3. **깨끗한 빌드 실행**
+   ```bash
+   npm run build
+   ```
+
+4. **개발 서버 재시작**
+   ```bash
+   npm run dev
+   ```
+
+5. **여전히 문제가 발생하는 경우**
+   - 브라우저 캐시도 클리어: 하드 리프레시 (Ctrl+Shift+R)
+   - `node_modules` 폴더 전체 삭제 후 재설치
+
+**방지책**:
+- ✅ 개발 서버 종료 시 `Ctrl+C`로 정상 종료 (강제 종료 지양)
+- ✅ 한 번에 하나의 개발 서버만 실행
+- ✅ 주요 변경사항 후 `npm run build`로 빌드 확인
+- ✅ Git 커밋 전 `.next` 폴더가 `.gitignore`에 포함되어 있는지 확인
+- ✅ 개발 서버 에러 발생 시 즉시 로그 확인
+- ✅ 코드 변경 후 서버 재시작이 필요한 경우 명확히 표시
+
+**자동화 스크립트 (선택사항)**:
+프로젝트 루트에 `clean.ps1` 파일 생성하여 빠른 정리 가능:
+```powershell
+# clean.ps1
+Write-Host "Stopping node processes..."
+Get-Process -Name node -ErrorAction SilentlyContinue | Stop-Process -Force
+Start-Sleep -Seconds 1
+
+Write-Host "Deleting cache folders..."
+Remove-Item -Path .next -Recurse -Force -ErrorAction SilentlyContinue
+Remove-Item -Path node_modules/.cache -Recurse -Force -ErrorAction SilentlyContinue
+
+Write-Host "Cache cleaned! You can now run 'npm run dev'"
+```
+
+---
+
 ## 3. 아키텍처 및 구조 문제
 
 ### 3.1 폴더 구조 규칙 위반

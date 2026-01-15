@@ -80,7 +80,8 @@ project-root/
 │
 └── doc/                    # 프로젝트 문서
     ├── ARCHITECTURE.md    # 아키텍처 가이드
-    └── TROUBLESHOOTING.md # 문제 해결 가이드
+    ├── TROUBLESHOOTING.md # 문제 해결 가이드
+    └── SEARCH_FEATURE.md  # 글로벌 검색 기능 정의서
 ```
 
 ## 📚 주요 문서
@@ -89,6 +90,7 @@ project-root/
 
 - **[ARCHITECTURE.md](./doc/ARCHITECTURE.md)**: 프로젝트 구조, 컴포넌트 관리, 기술 실행 규칙 등 종합 가이드
 - **[TROUBLESHOOTING.md](./doc/TROUBLESHOOTING.md)**: 문제 해결 및 방지 가이드
+- **[SEARCH_FEATURE.md](./doc/SEARCH_FEATURE.md)**: 글로벌 검색 기능 정의서 (검색 케이스 및 AI 동작 방식)
 - **[README_TOKENS.md](./README_TOKENS.md)**: 디자인 토큰 통합 가이드
 
 ## 🎨 디자인 토큰

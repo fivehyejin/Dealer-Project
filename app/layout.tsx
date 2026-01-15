@@ -1,10 +1,11 @@
-import type { Metadata } from 'next'
-import './globals.css'
+// [2024-01-26]
+// 전역 레이아웃에 Navbar와 Sidebar 추가
+// 모든 페이지에 고정적으로 표시되도록 수정
+'use client'
 
-export const metadata: Metadata = {
-  title: 'Dealer Dashboard',
-  description: 'Dealer management dashboard',
-}
+import './globals.css'
+import Navbar from '@/components/layout/Navbar'
+import Sidebar from '@/components/layout/Sidebar'
 
 export default function RootLayout({
   children,
@@ -13,7 +14,15 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ko">
-      <body>{children}</body>
+      <body>
+        <div className="min-h-screen bg-gray-50">
+          <Navbar />
+          <Sidebar />
+          <main className="ml-[292px] mt-[60px] p-8">
+            {children}
+          </main>
+        </div>
+      </body>
     </html>
   )
 }
